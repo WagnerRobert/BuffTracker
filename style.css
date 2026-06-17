@@ -403,7 +403,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 .summary-columns {
   display: grid;
   grid-template-columns: repeat(3, minmax(240px, 1fr));
-  gap: 1.5rem;
+  gap: 0;
   align-items: start;
 }
 
