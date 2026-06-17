@@ -32,46 +32,50 @@
             <strong id="attack-string">+0</strong>
           </div>
           <div class="result-row">
-            <span>Normal Damage:</span>
+            <span>Damage:</span>
             <strong id="top-normal-damage">0</strong>
           </div>
           <div class="result-row">
-            <span>Critical Damage:</span>
+            <span>Critical:</span>
             <strong id="top-crit-damage">0</strong>
           </div>
         </div>
-        <div class="summary-col">
+        <div class="summary-col summary-defense-col">
           <div class="summary-col-label">Defense</div>
-          <div class="result-row">
-            <span>Total AC:</span>
-            <strong id="summary-ac-total">10</strong>
-          </div>
-          <div class="result-row">
-            <span>Touch AC:</span>
-            <strong id="summary-ac-touch">10</strong>
-          </div>
-          <div class="result-row">
-            <span>Flat-footed AC:</span>
-            <strong id="summary-ac-flatfooted">10</strong>
-          </div>
-          <div class="result-row">
-            <span>Flat-footed Touch:</span>
-            <strong id="summary-ac-flatfooted-touch">10</strong>
+          <div class="ac-summary-grid">
+            <div class="ac-summary-item">
+              <span>Total</span>
+              <strong id="summary-ac-total">10</strong>
+            </div>
+            <div class="ac-summary-item">
+              <span>Touch</span>
+              <strong id="summary-ac-touch">10</strong>
+            </div>
+            <div class="ac-summary-item">
+              <span>Flat-footed</span>
+              <strong id="summary-ac-flatfooted">10</strong>
+            </div>
+            <div class="ac-summary-item">
+              <span>Flat Touch</span>
+              <strong id="summary-ac-flatfooted-touch">10</strong>
+            </div>
           </div>
         </div>
-        <div class="summary-col">
+        <div class="summary-col summary-saves-col">
           <div class="summary-col-label">Saves</div>
-          <div class="result-row">
-            <span>Fortitude:</span>
-            <strong class="rollable" id="summary-fort" title="Click to roll Fortitude">0</strong>
-          </div>
-          <div class="result-row">
-            <span>Reflex:</span>
-            <strong class="rollable" id="summary-reflex" title="Click to roll Reflex">0</strong>
-          </div>
-          <div class="result-row">
-            <span>Will:</span>
-            <strong class="rollable" id="summary-will" title="Click to roll Will">0</strong>
+          <div class="summary-saves-row">
+            <div class="save-item rollable" title="Click to roll Fortitude">
+              <span class="save-label">Fortitude</span>
+              <strong id="summary-fort-value">0</strong>
+            </div>
+            <div class="save-item rollable" title="Click to roll Reflex">
+              <span class="save-label">Reflex</span>
+              <strong id="summary-reflex-value">0</strong>
+            </div>
+            <div class="save-item rollable" title="Click to roll Will">
+              <span class="save-label">Will</span>
+              <strong id="summary-will-value">0</strong>
+            </div>
           </div>
         </div>
       </div>

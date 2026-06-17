@@ -320,7 +320,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
@@ -330,6 +330,51 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   letter-spacing: 0.08em;
   color: #a8b0d0;
   margin-bottom: 0.4rem;
+}
+
+.summary-defense-col .ac-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.ac-summary-item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+}
+
+.ac-summary-item span {
+  color: #a8b0d0;
+  font-size: 0.9rem;
+}
+
+.summary-saves-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.save-item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  min-width: 100px;
+}
+
+.save-item span {
+  color: #a8b0d0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.save-item strong {
+  font-size: 1rem;
 }
 
 @media (max-width: 520px) {
