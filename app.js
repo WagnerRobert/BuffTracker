@@ -44,7 +44,6 @@ const elements = {
   rollOutput: document.getElementById('roll-output'),
   rollOutputTitle: document.getElementById('roll-output-title'),
   rollOutputBody: document.getElementById('roll-output-body'),
-  acBase: document.getElementById('ac-base'),
   acArmor: document.getElementById('ac-armor'),
   acArmorEnh: document.getElementById('ac-armor-enh'),
   acShield: document.getElementById('ac-shield'),
@@ -110,7 +109,6 @@ function loadState() {
   if (state.inputs.damageDiceType !== undefined) elements.damageDiceType.value = state.inputs.damageDiceType;
   if (state.inputs.critMultiplier !== undefined) elements.critMultiplier.value = state.inputs.critMultiplier;
   if (state.inputs.critRange !== undefined) elements.critRange.value = state.inputs.critRange;
-  if (state.inputs.acBase !== undefined) elements.acBase.value = state.inputs.acBase;
   if (state.inputs.acArmor !== undefined) elements.acArmor.value = state.inputs.acArmor;
   if (state.inputs.acArmorEnh !== undefined) elements.acArmorEnh.value = state.inputs.acArmorEnh;
   if (state.inputs.acShield !== undefined) elements.acShield.value = state.inputs.acShield;
@@ -135,7 +133,6 @@ function saveState() {
     damageDiceType: elements.damageDiceType.value,
     critMultiplier: elements.critMultiplier.value,
     critRange: elements.critRange.value,
-    acBase: elements.acBase.value,
     acArmor: elements.acArmor.value,
     acArmorEnh: elements.acArmorEnh.value,
     acShield: elements.acShield.value,
@@ -289,7 +286,7 @@ function update() {
   renderAttackList(attacks);
 
   const damageApplied = calculateDamageAppliedBuffs(state.buffs);
-  const acBase = Number(elements.acBase.value) || 10;
+  const acBase = 10;
   const armorBonus = Number(elements.acArmor.value) || 0;
   const armorEnhBonus = Number(elements.acArmorEnh.value) || 0;
   const shieldBonus = Number(elements.acShield.value) || 0;
@@ -1062,7 +1059,7 @@ function rollDamage(label, formula) {
 }
 
 function addInputListeners() {
-  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-base', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'ac-deflection', 'ac-natural', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
+  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'ac-deflection', 'ac-natural', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
     document.getElementById(id).addEventListener('input', update);
   });
 }
