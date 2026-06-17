@@ -352,9 +352,9 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 }
 
 .summary-saves-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
   gap: 0.75rem;
-  flex-wrap: wrap;
 }
 
 .save-item {
@@ -363,7 +363,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   padding: 0.95rem 1rem;
   background: rgba(255, 255, 255, 0.04);
   border-radius: 16px;
-  min-width: 100px;
+  min-width: 0;
 }
 
 .save-item span {
