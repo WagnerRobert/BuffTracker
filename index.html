@@ -17,22 +17,51 @@
       <button class="tab-button active" data-tab="summary">Summary</button>
       <button class="tab-button" data-tab="attack">Attack</button>
       <button class="tab-button" data-tab="damage">Damage</button>
+      <button class="tab-button" data-tab="ac">AC</button>
       <button class="tab-button" data-tab="buffs">Buffs</button>
     </div>
 
     <section class="card tab-panel" id="summary-tab">
       <h2>Summary</h2>
-      <div class="result-row">
-        <span>Attacks:</span>
-        <strong id="attack-string">+0</strong>
+      <div class="summary-columns">
+        <div class="summary-col">
+          <div class="summary-col-label">Offense</div>
+          <div class="result-row">
+            <span>Attacks:</span>
+            <strong id="attack-string">+0</strong>
+          </div>
+          <div class="result-row">
+            <span>Normal Damage:</span>
+            <strong id="top-normal-damage">0</strong>
+          </div>
+          <div class="result-row">
+            <span>Critical Damage:</span>
+            <strong id="top-crit-damage">0</strong>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-col-label">Defense</div>
+          <div class="result-row">
+            <span>Total AC:</span>
+            <strong id="summary-ac-total">10</strong>
+          </div>
+          <div class="result-row">
+            <span>Touch AC:</span>
+            <strong id="summary-ac-touch">10</strong>
+          </div>
+          <div class="result-row">
+            <span>Flat-footed AC:</span>
+            <strong id="summary-ac-flatfooted">10</strong>
+          </div>
+          <div class="result-row">
+            <span>Flat-footed Touch:</span>
+            <strong id="summary-ac-flatfooted-touch">10</strong>
+          </div>
+        </div>
       </div>
-      <div class="result-row">
-        <span>Normal Damage:</span>
-        <strong id="top-normal-damage">0</strong>
-      </div>
-      <div class="result-row">
-        <span>Critical Damage:</span>
-        <strong id="top-crit-damage">0</strong>
+      <div class="roll-output" id="roll-output" hidden>
+        <h3 class="roll-output-title" id="roll-output-title">Roll</h3>
+        <div class="roll-output-body" id="roll-output-body"></div>
       </div>
       <div class="temporary-buffs-card">
         <h3>Temporary Buffs</h3>
@@ -61,13 +90,9 @@
 
       <section class="card">
         <h2>Attack Results</h2>
-        <div class="result-row">
-          <span>Total Applied Bonus:</span>
-          <strong id="applied-bonus">0</strong>
-        </div>
-        <div class="result-row">
-          <span>Attack Formula:</span>
-          <strong id="formula-text">0 + 0 + 0 + 0 + 0</strong>
+        <div class="formula-section">
+          <span class="formula-section-label">Attack Formula</span>
+          <div class="formula-chips" id="formula-text"></div>
         </div>
         <div class="result-row">
           <span>Attack Count:</span>
@@ -80,45 +105,45 @@
     <div class="tab-panel hidden" id="damage-tab">
       <section class="card">
         <h2>Damage Inputs</h2>
-        <form id="damage-form" class="grid">
-          <label>
-            Damage Ability Bonus
-            <input type="number" id="damage-mod" value="4" step="1" />
-          </label>
-          <label>
-            Dice Count
-            <input type="number" id="damage-dice-count" value="1" min="1" step="1" />
-          </label>
-          <label>
-            Dice Type
-            <select id="damage-dice-type">
-              <option value="4">d4</option>
-              <option value="6" selected>d6</option>
-              <option value="8">d8</option>
-              <option value="10">d10</option>
-              <option value="12">d12</option>
-            </select>
-          </label>
-          <label>
-            Crit Multiplier
-            <input type="number" id="crit-multiplier" value="2" min="1" step="1" />
-          </label>
+        <form id="damage-form">
+          <div class="grid">
+            <label>
+              Attribute Modifier
+              <input type="number" id="damage-mod" value="4" step="1" />
+            </label>
+            <label>
+              Dice Count
+              <input type="number" id="damage-dice-count" value="1" min="1" step="1" />
+            </label>
+            <label>
+              Dice Type
+              <select id="damage-dice-type">
+                <option value="4">d4</option>
+                <option value="6" selected>d6</option>
+                <option value="8">d8</option>
+                <option value="10">d10</option>
+                <option value="12">d12</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid" style="margin-top:1rem">
+            <label>
+              Crit Range
+              <input type="number" id="crit-range" value="20" min="1" max="20" step="1" />
+            </label>
+            <label>
+              Crit Multiplier
+              <input type="number" id="crit-multiplier" value="2" min="1" step="1" />
+            </label>
+          </div>
         </form>
       </section>
 
       <section class="card">
         <h2>Damage Results</h2>
         <div class="result-row">
-          <span>Total Damage Bonus:</span>
-          <strong id="damage-applied-bonus">0</strong>
-        </div>
-        <div class="result-row">
           <span>Precision Bonus:</span>
           <strong id="precision-bonus">0</strong>
-        </div>
-        <div class="result-row">
-          <span>Non-Precision Bonus:</span>
-          <strong id="nonprecision-bonus">0</strong>
         </div>
         <div class="result-row">
           <span>Normal Damage:</span>
@@ -128,9 +153,9 @@
           <span>Critical Damage:</span>
           <strong id="crit-damage">0</strong>
         </div>
-        <div class="result-row">
-          <span>Damage Formula:</span>
-          <strong id="damage-formula">d6 + 0</strong>
+        <div class="formula-section">
+          <span class="formula-section-label">Damage Formula</span>
+          <div class="formula-chips" id="damage-formula"></div>
         </div>
       </section>
     </div>
@@ -173,6 +198,14 @@
               <option value="12">d12</option>
             </select>
           </label>
+          <label>
+            AC Bonus
+            <input type="number" id="buff-ac-bonus" value="0" step="1" />
+          </label>
+          <label>
+            AC Type
+            <input type="text" id="buff-ac-type" placeholder="e.g. armor (leave blank for untyped)" />
+          </label>
           <div class="checkbox-row full-width">
             <label class="checkbox-label">
               <input type="checkbox" id="buff-precision" />
@@ -181,6 +214,14 @@
             <label class="checkbox-label">
               <input type="checkbox" id="buff-temporary" />
               Temporary
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="buff-ac-touch" />
+              AC vs Touch
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="buff-ac-flatfooted" />
+              AC when Flat-footed
             </label>
           </div>
           <button type="button" id="add-buff" class="full-width">Add Buff</button>
@@ -202,6 +243,57 @@
             </thead>
             <tbody></tbody>
           </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel hidden" id="ac-tab">
+      <section class="card">
+        <h2>Armor Class Inputs</h2>
+        <form id="ac-form">
+          <div class="grid">
+            <label>
+              Base AC
+              <input type="number" id="ac-base" value="10" step="1" />
+            </label>
+            <label>
+              Armor Bonus
+              <input type="number" id="ac-armor" value="0" min="0" step="1" />
+            </label>
+            <label>
+              Enhancement (Armor)
+              <input type="number" id="ac-armor-enh" value="0" min="0" step="1" />
+            </label>
+            <label>
+              Shield Bonus
+              <input type="number" id="ac-shield" value="0" min="0" step="1" />
+            </label>
+            <label>
+              Enhancement (Shield)
+              <input type="number" id="ac-shield-enh" value="0" min="0" step="1" />
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>AC Results</h2>
+        <p class="stacking-note">Only untyped and dodge bonuses stack. All other typed bonuses: only the highest applies.</p>
+        <div class="formula-section">
+          <span class="formula-section-label">Total AC</span>
+          <div class="formula-chips" id="ac-formula"></div>
+        </div>
+        <div class="formula-section">
+          <span class="formula-section-label">Touch AC</span>
+          <div class="formula-chips" id="ac-touch-formula"></div>
+        </div>
+        <div class="formula-section">
+          <span class="formula-section-label">Flat-footed AC</span>
+          <div class="formula-chips" id="ac-flatfooted-formula"></div>
+        </div>
+        <div class="formula-section">
+          <span class="formula-section-label">Flat-footed Touch AC</span>
+          <div class="formula-chips" id="ac-flatfooted-touch-formula"></div>
         </div>
       </section>
     </div>

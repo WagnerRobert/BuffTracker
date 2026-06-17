@@ -208,8 +208,146 @@ td button {
   display: none;
 }
 
+.stacking-note {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: #a8b0d0;
+}
+
+.formula-section {
+  padding: 0.65rem 0;
+}
+
+.formula-section-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #a8b0d0;
+  margin-bottom: 0.6rem;
+}
+
+.formula-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.formula-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.35rem 0.65rem;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.formula-chip strong {
+  font-size: 1rem;
+  color: #e8edf8;
+}
+
+.formula-chip span {
+  font-size: 0.7rem;
+  color: #a8b0d0;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+}
+
+.formula-chip-type {
+  font-size: 0.65rem;
+  color: #7c9bff;
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.formula-sep {
+  font-size: 1.1rem;
+  color: #a8b0d0;
+  padding: 0 0.1rem;
+  align-self: center;
+  margin-bottom: 1rem;
+}
+
+.summary-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.summary-col-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a8b0d0;
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 520px) {
+  .summary-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 680px) {
   .buff-form {
     grid-template-columns: 1fr;
   }
+}
+
+.rollable {
+  cursor: pointer;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.4);
+  transition: color 0.15s;
+}
+
+.rollable:hover {
+  color: #7c9bff;
+}
+
+.roll-output {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(58, 92, 249, 0.12);
+  border: 1px solid rgba(58, 92, 249, 0.35);
+  border-radius: 16px;
+}
+
+.roll-output-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a8b0d0;
+}
+
+.roll-output-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.roll-d20 {
+  color: #a8b0d0;
+}
+
+.roll-bonus {
+  color: #a8b0d0;
+}
+
+.roll-total {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #e8edf8;
+}
+
+.roll-dice {
+  color: #a8b0d0;
+  font-size: 0.9rem;
+}
+
+.roll-crit-threat {
+  color: #ffb347;
+  font-weight: 700;
 }
