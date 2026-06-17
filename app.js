@@ -1022,6 +1022,27 @@ function addBuff() {
   elements.buffWillType.value = '';
   elements.buffAllsavesBonus.value = '0';
   elements.buffAllsavesType.value = '';
+
+  const attackDamageToggle = document.getElementById('attack-damage-toggle');
+  const attackDamageFields = document.getElementById('attack-damage-fields');
+  const acToggle = document.getElementById('ac-toggle');
+  const acFields = document.getElementById('ac-fields');
+  const savesToggle = document.getElementById('saves-toggle');
+  const savesFields = document.getElementById('saves-fields');
+
+  if (attackDamageToggle && attackDamageFields) {
+    attackDamageToggle.setAttribute('aria-expanded', 'false');
+    attackDamageFields.hidden = true;
+  }
+  if (acToggle && acFields) {
+    acToggle.setAttribute('aria-expanded', 'false');
+    acFields.hidden = true;
+  }
+  if (savesToggle && savesFields) {
+    savesToggle.setAttribute('aria-expanded', 'false');
+    savesFields.hidden = true;
+  }
+
   update();
 }
 
