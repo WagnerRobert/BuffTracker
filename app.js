@@ -735,30 +735,30 @@ function buildEffectSummary(buff) {
       return Number(effect.bonus) !== 0;
     })
     .map((effect) => {
-      const type = effect.untyped ? 'untyped' : effect.type || 'Other';
+      const type = effect.untyped ? '' : effect.type || 'Other';
       const sign = effect.bonus >= 0 ? '+' : '';
+      const typePrefix = type ? `${type} ` : '';
 
       if (effect.target === 'attack') {
-        return `${sign}${effect.bonus} ${type} attack`;
+        return `${sign}${effect.bonus} ${typePrefix}attack`;
       }
 
       if (effect.target === 'damage') {
         const diceString = effect.diceCount > 0 ? ` + ${effect.diceCount}d${effect.diceType}` : '';
         const precisionString = effect.precision ? ' precision' : '';
-        return `${sign}${effect.bonus}${diceString} ${type} damage${precisionString}`;
+        return `${sign}${effect.bonus}${diceString} ${typePrefix}damage${precisionString}`;
       }
 
       if (effect.target === 'ac') {
-        return `${sign}${effect.bonus} ${type} AC`;
+        return `${sign}${effect.bonus} ${typePrefix}AC`;
       }
 
       if (effect.target === 'save') {
         const saveLabel = {fort: 'fort', reflex: 'ref', will: 'will', all: 'allRes'}[effect.saveTarget] || effect.saveTarget;
-        const typePrefix = effect.untyped ? '' : `${type} `;
         return `${sign}${effect.bonus} ${typePrefix}${saveLabel}`;
       }
 
-      return `${sign}${effect.bonus} ${type} ${effect.target}${effect.untyped ? ' (untyped)' : ''}`;
+      return `${sign}${effect.bonus} ${typePrefix}${effect.target}`;
     })
     .join(' | ');
 }
