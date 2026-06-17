@@ -423,6 +423,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.4rem;
+  min-height: 1.8rem;
 }
 
 .summary-collapse-toggle {
