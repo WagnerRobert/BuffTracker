@@ -12,15 +12,12 @@ const elements = {
   buffName: document.getElementById('buff-name'),
   buffAttackBonus: document.getElementById('buff-attack-bonus'),
   buffAttackType: document.getElementById('buff-attack-type'),
-  buffAttackUntyped: document.getElementById('buff-attack-untyped'),
   buffDamageBonus: document.getElementById('buff-damage-bonus'),
   buffDamageType: document.getElementById('buff-damage-type'),
   buffDiceCount: document.getElementById('buff-dice-count'),
   buffDiceType: document.getElementById('buff-dice-type'),
-  buffDamageUntyped: document.getElementById('buff-damage-untyped'),
   buffPrecision: document.getElementById('buff-precision'),
   buffTemporary: document.getElementById('buff-temporary'),
-  buffEnabled: document.getElementById('buff-enabled'),
   temporaryBuffsList: document.getElementById('temporary-buffs-list'),
   addBuff: document.getElementById('add-buff'),
   buffTableBody: document.querySelector('#buff-table tbody'),
@@ -109,12 +106,14 @@ function normalizeBuff(buff) {
     return normalized;
   }
 
-  normalized.effects = [
+const attackType = (buff.attackType || '').trim();
+    const damageType = (buff.damageType || '').trim();
+    normalized.effects = [
     {
       target: 'attack',
       bonus: Number(buff.attackBonus) || 0,
-      type: (buff.attackType || '').trim(),
-      untyped: Boolean(buff.attackUntyped),
+      type: attackType,
+      untyped: attackType === '' || Boolean(buff.attackUntyped),
       diceCount: 0,
       diceType: 6,
       precision: false,
@@ -122,8 +121,8 @@ function normalizeBuff(buff) {
     {
       target: 'damage',
       bonus: Number(buff.damageBonus) || 0,
-      type: (buff.damageType || '').trim(),
-      untyped: Boolean(buff.damageUntyped),
+      type: damageType,
+      untyped: damageType === '' || Boolean(buff.damageUntyped),
       diceCount: Number(buff.diceCount) || 0,
       diceType: Number(buff.diceType) || 6,
       precision: Boolean(buff.precision),
@@ -311,17 +310,17 @@ function renderAttackList(attacks) {
 function buildEffectSummary(buff) {
   return buff.effects
     .map((effect) => {
-      const type = effect.type || 'Other';
+      const type = effect.untyped ? 'untyped' : effect.type || 'Other';
       const sign = effect.bonus >= 0 ? '+' : '';
 
       if (effect.target === 'attack') {
-        return `${sign}${effect.bonus} ${type} attack${effect.untyped ? ' (untyped)' : ''}`;
+        return `${sign}${effect.bonus} ${type} attack`;
       }
 
       if (effect.target === 'damage') {
         const diceString = effect.diceCount > 0 ? ` + ${effect.diceCount}d${effect.diceType}` : '';
         const precisionString = effect.precision ? ' precision' : '';
-        return `${sign}${effect.bonus}${diceString} ${type} damage${effect.untyped ? ' (untyped)' : ''}${precisionString}`;
+        return `${sign}${effect.bonus}${diceString} ${type} damage${precisionString}`;
       }
 
       return `${sign}${effect.bonus} ${type} ${effect.target}${effect.untyped ? ' (untyped)' : ''}`;
@@ -423,14 +422,11 @@ function addBuff() {
   const name = elements.buffName.value.trim();
   const attackBonus = Number(elements.buffAttackBonus.value) || 0;
   const attackType = elements.buffAttackType.value.trim();
-  const attackUntyped = elements.buffAttackUntyped.checked;
   const damageBonus = Number(elements.buffDamageBonus.value) || 0;
   const damageType = elements.buffDamageType.value.trim();
   const diceCount = Number(elements.buffDiceCount.value) || 0;
   const diceType = Number(elements.buffDiceType.value) || 6;
-  const damageUntyped = elements.buffDamageUntyped.checked;
   const precision = elements.buffPrecision.checked;
-  const enabled = elements.buffEnabled.checked;
 
   if (!name) {
     alert('Please enter a buff name.');
@@ -439,14 +435,14 @@ function addBuff() {
 
   state.buffs.push({
     name,
-    enabled,
+    enabled: true,
     temporary: elements.buffTemporary.checked,
     effects: [
       {
         target: 'attack',
         bonus: attackBonus,
         type: attackType,
-        untyped: attackUntyped,
+        untyped: attackType === '',
         diceCount: 0,
         diceType: 6,
         precision: false,
@@ -455,7 +451,7 @@ function addBuff() {
         target: 'damage',
         bonus: damageBonus,
         type: damageType,
-        untyped: damageUntyped,
+        untyped: damageType === '',
         diceCount,
         diceType,
         precision,
@@ -466,15 +462,12 @@ function addBuff() {
   elements.buffName.value = '';
   elements.buffAttackBonus.value = '0';
   elements.buffAttackType.value = '';
-  elements.buffAttackUntyped.checked = false;
   elements.buffDamageBonus.value = '0';
   elements.buffDamageType.value = '';
   elements.buffDiceCount.value = '0';
   elements.buffDiceType.value = '6';
-  elements.buffDamageUntyped.checked = false;
   elements.buffPrecision.checked = false;
   elements.buffTemporary.checked = false;
-  elements.buffEnabled.checked = true;
   update();
 }
 

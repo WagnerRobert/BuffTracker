@@ -139,13 +139,9 @@
       <section class="card">
         <h2>Buffs</h2>
         <form id="buff-form" class="buff-form">
-          <label>
+          <label class="full-width">
             Buff Name
             <input type="text" id="buff-name" placeholder="e.g. Bless" />
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="buff-enabled" checked />
-            Active
           </label>
           <label>
             Attack Bonus
@@ -153,11 +149,7 @@
           </label>
           <label>
             Attack Type
-            <input type="text" id="buff-attack-type" placeholder="e.g. moral" />
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="buff-attack-untyped" />
-            Attack Untyped
+            <input type="text" id="buff-attack-type" placeholder="e.g. moral (leave blank for untyped)" />
           </label>
           <label>
             Damage Bonus
@@ -165,7 +157,7 @@
           </label>
           <label>
             Damage Type
-            <input type="text" id="buff-damage-type" placeholder="e.g. sacred" />
+            <input type="text" id="buff-damage-type" placeholder="e.g. sacred (leave blank for untyped)" />
           </label>
           <label>
             Bonus Dice Count
@@ -181,19 +173,17 @@
               <option value="12">d12</option>
             </select>
           </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="buff-damage-untyped" />
-            Damage Untyped
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="buff-precision" />
-            Precision
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" id="buff-temporary" />
-            Temporary
-          </label>
-          <button type="button" id="add-buff">Add Buff</button>
+          <div class="checkbox-row full-width">
+            <label class="checkbox-label">
+              <input type="checkbox" id="buff-precision" />
+              Precision
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="buff-temporary" />
+              Temporary
+            </label>
+          </div>
+          <button type="button" id="add-buff" class="full-width">Add Buff</button>
         </form>
       </section>
 
