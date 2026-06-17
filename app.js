@@ -276,16 +276,18 @@ function update() {
     .join('/');
 
   elements.attackString.innerHTML = '';
-  attacks.forEach((attack, index) => {
-    if (index > 0) {
-      elements.attackString.appendChild(document.createTextNode('/'));
-    }
-    const span = document.createElement('span');
-    span.className = 'rollable attack-roll-span';
-    span.title = `Click to roll ${attack.label}`;
-    span.textContent = `${attack.value >= 0 ? '+' : ''}${attack.value}`;
-    span.addEventListener('click', () => rollAttack(attack));
-    elements.attackString.appendChild(span);
+  attacks.forEach((attack) => {
+    const card = document.createElement('div');
+    card.className = 'attack-summary-item rollable';
+    card.title = `Click to roll ${attack.tooltip}`;
+    const label = document.createElement('span');
+    label.textContent = `⚔ ${attack.label}`;
+    const value = document.createElement('strong');
+    value.textContent = `${attack.value >= 0 ? '+' : ''}${attack.value}`;
+    card.appendChild(label);
+    card.appendChild(value);
+    card.addEventListener('click', () => rollAttack(attack));
+    elements.attackString.appendChild(card);
   });
   elements.attackCount.textContent = `${attacks.length}`;
   state.currentAttacks = attacks;
@@ -705,6 +707,11 @@ function mergeDiceCounts(...diceObjects) {
   }, {});
 }
 
+function toRoman(num) {
+  const romans = ['I', 'II', 'III', 'IV'];
+  return romans[num - 1] || String(num);
+}
+
 function calculateAttackSequence(bab, totalBonus) {
   const thresholds = [16, 11, 6];
   let count = 1;
@@ -719,7 +726,12 @@ function calculateAttackSequence(bab, totalBonus) {
   for (let index = 0; index < count; index += 1) {
     const penalty = 5 * index;
     const attackValue = bab + totalBonus - penalty;
-    attacks.push({label: index === 0 ? 'Primary Attack' : `Secondary Attack ${index}`, value: attackValue});
+    const roman = toRoman(index + 1);
+    attacks.push({
+      label: roman,
+      value: attackValue,
+      tooltip: index === 0 ? `Primary Attack ${roman}` : `Secondary Attack ${roman}`,
+    });
   }
 
   return attacks;
@@ -1052,7 +1064,7 @@ function rollAttack(attack) {
     note = `<span class="roll-crit-threat"> — Crit Threat!</span>`;
   }
   showRoll(
-    attack.label,
+    `⚔ ${attack.label}`,
     `<span class="roll-d20">d20: ${d20}</span> ${sign}<span class="roll-bonus">${attack.value}</span> = <span class="roll-total">${total}</span>${note}`,
   );
 }
@@ -1122,21 +1134,26 @@ function init() {
   // Summary clickable rolls
   elements.attackString.classList.add('attack-string-container');
 
-  elements.topNormalDamage.classList.add('rollable');
-  elements.topNormalDamage.title = 'Click to roll normal damage';
-  elements.topNormalDamage.addEventListener('click', () => {
-    if (state.currentNormalFormula) rollDamage('Normal Damage', state.currentNormalFormula);
-  });
+  const topNormalCard = document.getElementById('top-normal-card');
+  if (topNormalCard) {
+    topNormalCard.addEventListener('click', () => {
+      if (state.currentNormalFormula) rollDamage('Normal Damage', state.currentNormalFormula);
+    });
+  }
 
-  elements.topCritDamage.classList.add('rollable');
-  elements.topCritDamage.title = 'Click to roll critical damage';
-  elements.topCritDamage.addEventListener('click', () => {
-    if (state.currentCritFormula) rollDamage('Critical Damage', state.currentCritFormula);
-  });
+  const topCritCard = document.getElementById('top-crit-card');
+  if (topCritCard) {
+    topCritCard.addEventListener('click', () => {
+      if (state.currentCritFormula) rollDamage('Critical Damage', state.currentCritFormula);
+    });
+  }
 
   ['fort', 'reflex', 'will'].forEach((save) => {
-    const el = elements[`summary${save.charAt(0).toUpperCase() + save.slice(1)}`];
-    el.addEventListener('click', () => rollSave(save));
+    const elementId = `summary-${save}-card`;
+    const el = document.getElementById(elementId);
+    if (el) {
+      el.addEventListener('click', () => rollSave(save));
+    }
   });
 
   setActiveTab(state.selectedTab);

@@ -25,19 +25,18 @@
     <section class="card tab-panel" id="summary-tab">
       <h2>Summary</h2>
       <div class="summary-columns">
-        <div class="summary-col">
+        <div class="summary-col summary-offense-col">
           <div class="summary-col-label">Offense</div>
-          <div class="result-row">
-            <span>Attacks:</span>
-            <strong id="attack-string">+0</strong>
-          </div>
-          <div class="result-row">
-            <span>Damage:</span>
-            <strong id="top-normal-damage">0</strong>
-          </div>
-          <div class="result-row">
-            <span>Critical:</span>
-            <strong id="top-crit-damage">0</strong>
+          <div class="summary-offense-grid">
+            <div id="attack-string" class="attack-summary-row attack-string-container"></div>
+            <div id="top-normal-card" class="summary-value-card rollable" title="Click to roll normal damage">
+              <span>Damage</span>
+              <strong id="top-normal-damage">0</strong>
+            </div>
+            <div id="top-crit-card" class="summary-value-card rollable" title="Click to roll critical damage">
+              <span>Critical</span>
+              <strong id="top-crit-damage">0</strong>
+            </div>
           </div>
         </div>
         <div class="summary-col summary-defense-col">
@@ -64,15 +63,15 @@
         <div class="summary-col summary-saves-col">
           <div class="summary-col-label">Saves</div>
           <div class="summary-saves-row">
-            <div class="save-item rollable" title="Click to roll Fortitude">
+            <div id="summary-fort-card" class="save-item rollable" title="Click to roll Fortitude">
               <span class="save-label">Fortitude</span>
-              <strong id="summary-fort-value">0</strong>
+              <strong id="summary-fort-value">+4</strong>
             </div>
-            <div class="save-item rollable" title="Click to roll Reflex">
+            <div id="summary-reflex-card" class="save-item rollable" title="Click to roll Reflex">
               <span class="save-label">Reflex</span>
-              <strong id="summary-reflex-value">0</strong>
+              <strong id="summary-reflex-value">+4</strong>
             </div>
-            <div class="save-item rollable" title="Click to roll Will">
+            <div id="summary-will-card" class="save-item rollable" title="Click to roll Will">
               <span class="save-label">Will</span>
               <strong id="summary-will-value">0</strong>
             </div>

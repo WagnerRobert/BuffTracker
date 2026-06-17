@@ -155,6 +155,89 @@ td button {
   padding: 0.65rem 0;
 }
 
+.summary-offense-col .result-row strong,
+.summary-saves-col .save-item {
+  display: inline-grid;
+  place-items: center;
+  gap: 0.35rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  min-width: 0;
+}
+
+.attack-summary-row,
+.summary-offense-values,
+.summary-saves-row {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.attack-summary-row {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+  grid-auto-columns: minmax(0, 1fr);
+  justify-content: stretch;
+}
+
+.summary-offense-grid {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 1.25rem;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.attack-summary-row {
+  grid-column: 1 / -1;
+  justify-self: stretch;
+}
+
+.summary-offense-values {
+  width: 100%;
+}
+
+.attack-summary-item,
+.summary-value-card,
+.save-item,
+.ac-summary-item {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  min-width: 0;
+  justify-items: center;
+  text-align: center;
+  align-content: center;
+}
+
+.attack-summary-item span,
+.summary-value-card span,
+.save-item span,
+.ac-summary-item span {
+  color: #a8b0d0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.attack-summary-item span {
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+}
+
+.attack-summary-item strong,
+.summary-value-card strong {
+  font-size: 1rem;
+}
+
+.summary-offense-col .result-row strong {
+  font-size: 1rem;
+  text-align: center;
+}
+
 .attack-list {
   margin-top: 1rem;
   display: grid;
@@ -320,8 +403,13 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-columns {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
+  align-items: start;
+}
+
+.summary-col {
+  min-width: 0;
 }
 
 .summary-col-label {
@@ -334,7 +422,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-defense-col .ac-summary-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
   gap: 0.75rem;
 }
 
@@ -344,6 +432,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   padding: 0.95rem 1rem;
   background: rgba(255, 255, 255, 0.04);
   border-radius: 16px;
+  min-width: 0;
 }
 
 .ac-summary-item span {
@@ -353,7 +442,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-saves-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.75rem;
 }
 
@@ -364,6 +453,10 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 16px;
   min-width: 0;
+}
+
+.summary-offense-col .result-row strong {
+  min-width: 100px;
 }
 
 .save-item span {
