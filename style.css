@@ -225,6 +225,42 @@ td button {
   margin-top: 0.25rem;
 }
 
+button.buff-form-divider {
+  background: none;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.75rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+button.buff-form-divider:hover {
+  color: #c8d0f0;
+}
+
+.collapse-arrow {
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+}
+
+button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
+  transform: rotate(90deg);
+}
+
+.collapsible-section {
+  display: contents;
+}
+
+.collapsible-section[hidden] {
+  display: none;
+}
+
 .formula-section {
   padding: 0.65rem 0;
 }

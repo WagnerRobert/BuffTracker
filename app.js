@@ -752,6 +752,12 @@ function buildEffectSummary(buff) {
         return `${sign}${effect.bonus} ${type} AC`;
       }
 
+      if (effect.target === 'save') {
+        const saveLabel = {fort: 'fort', reflex: 'ref', will: 'will', all: 'allRes'}[effect.saveTarget] || effect.saveTarget;
+        const typePrefix = effect.untyped ? '' : `${type} `;
+        return `${sign}${effect.bonus} ${typePrefix}${saveLabel}`;
+      }
+
       return `${sign}${effect.bonus} ${type} ${effect.target}${effect.untyped ? ' (untyped)' : ''}`;
     })
     .join(' | ');
@@ -1077,6 +1083,31 @@ function init() {
   loadState();
   addInputListeners();
   elements.addBuff.addEventListener('click', addBuff);
+
+  const attackDamageToggle = document.getElementById('attack-damage-toggle');
+  const attackDamageFields = document.getElementById('attack-damage-fields');
+  attackDamageToggle.addEventListener('click', () => {
+    const expanded = attackDamageToggle.getAttribute('aria-expanded') === 'true';
+    attackDamageToggle.setAttribute('aria-expanded', String(!expanded));
+    attackDamageFields.hidden = expanded;
+  });
+
+  const acToggle = document.getElementById('ac-toggle');
+  const acFields = document.getElementById('ac-fields');
+  acToggle.addEventListener('click', () => {
+    const expanded = acToggle.getAttribute('aria-expanded') === 'true';
+    acToggle.setAttribute('aria-expanded', String(!expanded));
+    acFields.hidden = expanded;
+  });
+
+  const savesToggle = document.getElementById('saves-toggle');
+  const savesFields = document.getElementById('saves-fields');
+  savesToggle.addEventListener('click', () => {
+    const expanded = savesToggle.getAttribute('aria-expanded') === 'true';
+    savesToggle.setAttribute('aria-expanded', String(!expanded));
+    savesFields.hidden = expanded;
+  });
+
   document.querySelectorAll('.tab-button').forEach((button) => {
     button.addEventListener('click', () => setActiveTab(button.dataset.tab));
   });
