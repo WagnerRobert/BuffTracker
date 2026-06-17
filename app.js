@@ -730,6 +730,10 @@ function renderAttackList(attacks) {
 
 function buildEffectSummary(buff) {
   return buff.effects
+    .filter((effect) => {
+      if (effect.target === 'damage') return Number(effect.bonus) !== 0 || effect.diceCount > 0;
+      return Number(effect.bonus) !== 0;
+    })
     .map((effect) => {
       const type = effect.untyped ? 'untyped' : effect.type || 'Other';
       const sign = effect.bonus >= 0 ? '+' : '';
@@ -828,7 +832,10 @@ function renderBuffTable(buffs, attackAppliedByType, damageAppliedByType, acAppl
       <td>${effectSummary || 'No effects'}</td>
       <td>${anyApplied ? 'Yes' : 'No'}</td>
       <td>${buff.temporary ? 'Yes' : 'No'}</td>
-      <td><button type="button" data-index="${index}">Remove</button></td>
+      <td>
+        <button type="button" class="edit-buff" data-index="${index}">Edit</button>
+        <button type="button" class="remove-buff" data-index="${index}">Remove</button>
+      </td>
     `;
 
     elements.buffTableBody.appendChild(row);
@@ -842,13 +849,55 @@ function renderBuffTable(buffs, attackAppliedByType, damageAppliedByType, acAppl
     });
   });
 
-  elements.buffTableBody.querySelectorAll('button').forEach((button) => {
+  elements.buffTableBody.querySelectorAll('.edit-buff').forEach((button) => {
+    button.addEventListener('click', () => {
+      editBuff(Number(button.dataset.index));
+    });
+  });
+
+  elements.buffTableBody.querySelectorAll('.remove-buff').forEach((button) => {
     button.addEventListener('click', () => {
       const index = Number(button.dataset.index);
       state.buffs.splice(index, 1);
       update();
     });
   });
+}
+
+function editBuff(index) {
+  const buff = state.buffs[index];
+  const getEffect = (target) => buff.effects.find((e) => e.target === target) || {};
+  const getSaveEffect = (saveTarget) => buff.effects.find((e) => e.target === 'save' && e.saveTarget === saveTarget) || {};
+  const attack = getEffect('attack');
+  const damage = getEffect('damage');
+  const ac = getEffect('ac');
+  const fort = getSaveEffect('fort');
+  const reflex = getSaveEffect('reflex');
+  const will = getSaveEffect('will');
+  const allsaves = getSaveEffect('all');
+  elements.buffName.value = buff.name;
+  elements.buffAttackBonus.value = attack.bonus || 0;
+  elements.buffAttackType.value = attack.untyped ? '' : (attack.type || '');
+  elements.buffDamageBonus.value = damage.bonus || 0;
+  elements.buffDamageType.value = damage.untyped ? '' : (damage.type || '');
+  elements.buffDiceCount.value = damage.diceCount || 0;
+  elements.buffDiceType.value = damage.diceType || 6;
+  elements.buffPrecision.checked = !!damage.precision;
+  elements.buffTemporary.checked = !!buff.temporary;
+  elements.buffAcBonus.value = ac.bonus || 0;
+  elements.buffAcType.value = ac.untyped ? '' : (ac.type || '');
+  elements.buffAcTouch.checked = !!ac.touch;
+  elements.buffAcFlatfooted.checked = !!ac.flatfooted;
+  elements.buffFortBonus.value = fort.bonus || 0;
+  elements.buffFortType.value = fort.untyped ? '' : (fort.type || '');
+  elements.buffReflexBonus.value = reflex.bonus || 0;
+  elements.buffReflexType.value = reflex.untyped ? '' : (reflex.type || '');
+  elements.buffWillBonus.value = will.bonus || 0;
+  elements.buffWillType.value = will.untyped ? '' : (will.type || '');
+  elements.buffAllsavesBonus.value = allsaves.bonus || 0;
+  elements.buffAllsavesType.value = allsaves.untyped ? '' : (allsaves.type || '');
+  setActiveTab('buffs');
+  elements.buffName.focus();
 }
 
 function addBuff() {
@@ -878,7 +927,8 @@ function addBuff() {
     return;
   }
 
-  state.buffs.push({
+  const existingIndex = state.buffs.findIndex((b) => b.name === name);
+  const newBuff = {
     name,
     enabled: true,
     temporary: elements.buffTemporary.checked,
@@ -917,7 +967,14 @@ function addBuff() {
       {target: 'save', saveTarget: 'will', bonus: willBonus, type: willType, untyped: willType === ''},
       {target: 'save', saveTarget: 'all', bonus: allsavesBonus, type: allsavesType, untyped: allsavesType === ''},
     ],
-  });
+  };
+
+  if (existingIndex !== -1) {
+    newBuff.enabled = state.buffs[existingIndex].enabled;
+    state.buffs[existingIndex] = newBuff;
+  } else {
+    state.buffs.push(newBuff);
+  }
 
   elements.buffName.value = '';
   elements.buffAttackBonus.value = '0';
