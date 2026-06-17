@@ -18,6 +18,7 @@
       <button class="tab-button" data-tab="attack">Attack</button>
       <button class="tab-button" data-tab="damage">Damage</button>
       <button class="tab-button" data-tab="ac">AC</button>
+      <button class="tab-button" data-tab="saves">Saves</button>
       <button class="tab-button" data-tab="buffs">Buffs</button>
     </div>
 
@@ -56,6 +57,21 @@
           <div class="result-row">
             <span>Flat-footed Touch:</span>
             <strong id="summary-ac-flatfooted-touch">10</strong>
+          </div>
+        </div>
+        <div class="summary-col">
+          <div class="summary-col-label">Saves</div>
+          <div class="result-row">
+            <span>Fortitude:</span>
+            <strong class="rollable" id="summary-fort" title="Click to roll Fortitude">0</strong>
+          </div>
+          <div class="result-row">
+            <span>Reflex:</span>
+            <strong class="rollable" id="summary-reflex" title="Click to roll Reflex">0</strong>
+          </div>
+          <div class="result-row">
+            <span>Will:</span>
+            <strong class="rollable" id="summary-will" title="Click to roll Will">0</strong>
           </div>
         </div>
       </div>
@@ -224,6 +240,39 @@
               AC when Flat-footed
             </label>
           </div>
+          <div class="buff-form-divider">Saving Throw Bonuses</div>
+          <label>
+            Fortitude Bonus
+            <input type="number" id="buff-fort-bonus" value="0" step="1" />
+          </label>
+          <label>
+            Fort Type
+            <input type="text" id="buff-fort-type" placeholder="e.g. resistance (blank = untyped)" />
+          </label>
+          <label>
+            Reflex Bonus
+            <input type="number" id="buff-reflex-bonus" value="0" step="1" />
+          </label>
+          <label>
+            Reflex Type
+            <input type="text" id="buff-reflex-type" placeholder="e.g. resistance (blank = untyped)" />
+          </label>
+          <label>
+            Will Bonus
+            <input type="number" id="buff-will-bonus" value="0" step="1" />
+          </label>
+          <label>
+            Will Type
+            <input type="text" id="buff-will-type" placeholder="e.g. resistance (blank = untyped)" />
+          </label>
+          <label>
+            All Saves Bonus
+            <input type="number" id="buff-allsaves-bonus" value="0" step="1" />
+          </label>
+          <label>
+            All Saves Type
+            <input type="text" id="buff-allsaves-type" placeholder="e.g. morale (blank = untyped)" />
+          </label>
           <button type="button" id="add-buff" class="full-width">Add Buff</button>
         </form>
       </section>
@@ -243,6 +292,66 @@
             </thead>
             <tbody></tbody>
           </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel hidden" id="saves-tab">
+      <section class="card">
+        <h2>Saving Throw Inputs</h2>
+        <form id="saves-form">
+          <div class="grid">
+            <label>
+              Fort Base Save
+              <input type="number" id="save-fort-base" value="2" step="1" />
+            </label>
+            <label>
+              Fort Attribute Mod
+              <input type="number" id="save-fort-mod" value="2" step="1" />
+            </label>
+          </div>
+          <div class="grid">
+            <label>
+              Reflex Base Save
+              <input type="number" id="save-reflex-base" value="2" step="1" />
+            </label>
+            <label>
+              Reflex Attribute Mod
+              <input type="number" id="save-reflex-mod" value="2" step="1" />
+            </label>
+          </div>
+          <div class="grid">
+            <label>
+              Will Base Save
+              <input type="number" id="save-will-base" value="2" step="1" />
+            </label>
+            <label>
+              Will Attribute Mod
+              <input type="number" id="save-will-mod" value="0" step="1" />
+            </label>
+          </div>
+          <div class="grid">
+            <label>
+              Bonus to All Saves
+              <input type="number" id="save-all-bonus" value="0" step="1" />
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Save Results</h2>
+        <div class="formula-section">
+          <span class="formula-section-label">Fortitude</span>
+          <div class="formula-chips" id="save-fort-formula"></div>
+        </div>
+        <div class="formula-section">
+          <span class="formula-section-label">Reflex</span>
+          <div class="formula-chips" id="save-reflex-formula"></div>
+        </div>
+        <div class="formula-section">
+          <span class="formula-section-label">Will</span>
+          <div class="formula-chips" id="save-will-formula"></div>
         </div>
       </section>
     </div>

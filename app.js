@@ -8,6 +8,7 @@ const state = {
   currentNormalFormula: null,
   currentCritFormula: null,
   currentCritRange: 20,
+  currentSaves: {fort: 0, reflex: 0, will: 0},
 };
 
 const elements = {
@@ -60,6 +61,27 @@ const elements = {
   summaryAcTouch: document.getElementById('summary-ac-touch'),
   summaryAcFlatfooted: document.getElementById('summary-ac-flatfooted'),
   summaryAcFlatfootedTouch: document.getElementById('summary-ac-flatfooted-touch'),
+  summaryFort: document.getElementById('summary-fort'),
+  summaryReflex: document.getElementById('summary-reflex'),
+  summaryWill: document.getElementById('summary-will'),
+  saveFortBase: document.getElementById('save-fort-base'),
+  saveFortMod: document.getElementById('save-fort-mod'),
+  saveReflexBase: document.getElementById('save-reflex-base'),
+  saveReflexMod: document.getElementById('save-reflex-mod'),
+  saveWillBase: document.getElementById('save-will-base'),
+  saveWillMod: document.getElementById('save-will-mod'),
+  saveAllBonus: document.getElementById('save-all-bonus'),
+  saveFortFormula: document.getElementById('save-fort-formula'),
+  saveReflexFormula: document.getElementById('save-reflex-formula'),
+  saveWillFormula: document.getElementById('save-will-formula'),
+  buffFortBonus: document.getElementById('buff-fort-bonus'),
+  buffFortType: document.getElementById('buff-fort-type'),
+  buffReflexBonus: document.getElementById('buff-reflex-bonus'),
+  buffReflexType: document.getElementById('buff-reflex-type'),
+  buffWillBonus: document.getElementById('buff-will-bonus'),
+  buffWillType: document.getElementById('buff-will-type'),
+  buffAllsavesBonus: document.getElementById('buff-allsaves-bonus'),
+  buffAllsavesType: document.getElementById('buff-allsaves-type'),
 };
 
 function loadState() {
@@ -91,6 +113,13 @@ function loadState() {
   if (state.inputs.acArmorEnh !== undefined) elements.acArmorEnh.value = state.inputs.acArmorEnh;
   if (state.inputs.acShield !== undefined) elements.acShield.value = state.inputs.acShield;
   if (state.inputs.acShieldEnh !== undefined) elements.acShieldEnh.value = state.inputs.acShieldEnh;
+  if (state.inputs.saveFortBase !== undefined) elements.saveFortBase.value = state.inputs.saveFortBase;
+  if (state.inputs.saveFortMod !== undefined) elements.saveFortMod.value = state.inputs.saveFortMod;
+  if (state.inputs.saveReflexBase !== undefined) elements.saveReflexBase.value = state.inputs.saveReflexBase;
+  if (state.inputs.saveReflexMod !== undefined) elements.saveReflexMod.value = state.inputs.saveReflexMod;
+  if (state.inputs.saveWillBase !== undefined) elements.saveWillBase.value = state.inputs.saveWillBase;
+  if (state.inputs.saveWillMod !== undefined) elements.saveWillMod.value = state.inputs.saveWillMod;
+  if (state.inputs.saveAllBonus !== undefined) elements.saveAllBonus.value = state.inputs.saveAllBonus;
 }
 
 function saveState() {
@@ -107,6 +136,13 @@ function saveState() {
     acArmorEnh: elements.acArmorEnh.value,
     acShield: elements.acShield.value,
     acShieldEnh: elements.acShieldEnh.value,
+    saveFortBase: elements.saveFortBase.value,
+    saveFortMod: elements.saveFortMod.value,
+    saveReflexBase: elements.saveReflexBase.value,
+    saveReflexMod: elements.saveReflexMod.value,
+    saveWillBase: elements.saveWillBase.value,
+    saveWillMod: elements.saveWillMod.value,
+    saveAllBonus: elements.saveAllBonus.value,
   };
 
   localStorage.setItem(
@@ -138,6 +174,7 @@ function normalizeBuff(buff) {
       precision: Boolean(effect.precision),
       touch: Boolean(effect.touch),
       flatfooted: Boolean(effect.flatfooted),
+      saveTarget: effect.saveTarget || null,
     }));
     return normalized;
   }
@@ -328,6 +365,26 @@ function update() {
   elements.summaryAcTouch.textContent = `${touchAC}`;
   elements.summaryAcFlatfooted.textContent = `${flatfootedAC}`;
   elements.summaryAcFlatfootedTouch.textContent = `${flatfootedTouchAC}`;
+
+  const fortBase = Number(elements.saveFortBase.value) || 0;
+  const fortMod = Number(elements.saveFortMod.value) || 0;
+  const reflexBase = Number(elements.saveReflexBase.value) || 0;
+  const reflexMod = Number(elements.saveReflexMod.value) || 0;
+  const willBase = Number(elements.saveWillBase.value) || 0;
+  const willMod = Number(elements.saveWillMod.value) || 0;
+  const saveAllBonus = Number(elements.saveAllBonus.value) || 0;
+  const saveApplied = calculateSaveAppliedBuffs(state.buffs);
+  const fortTotal = fortBase + fortMod + saveAllBonus + saveApplied.fort.total;
+  const reflexTotal = reflexBase + reflexMod + saveAllBonus + saveApplied.reflex.total;
+  const willTotal = willBase + willMod + saveAllBonus + saveApplied.will.total;
+  state.currentSaves = {fort: fortTotal, reflex: reflexTotal, will: willTotal};
+  const allComponents = saveAllBonus !== 0 ? [{bonus: saveAllBonus, name: 'All Saves', type: null}] : [];
+  renderSaveFormulaChips(elements.saveFortFormula, fortBase, fortMod, allComponents, saveApplied.fort.components);
+  renderSaveFormulaChips(elements.saveReflexFormula, reflexBase, reflexMod, allComponents, saveApplied.reflex.components);
+  renderSaveFormulaChips(elements.saveWillFormula, willBase, willMod, allComponents, saveApplied.will.components);
+  elements.summaryFort.textContent = fortTotal >= 0 ? `+${fortTotal}` : `${fortTotal}`;
+  elements.summaryReflex.textContent = reflexTotal >= 0 ? `+${reflexTotal}` : `${reflexTotal}`;
+  elements.summaryWill.textContent = willTotal >= 0 ? `+${willTotal}` : `${willTotal}`;
 
   saveState();
 }
@@ -525,6 +582,98 @@ function renderACFormulaChips(container, acBase, components) {
   });
 }
 
+function calculateSaveAppliedBuffs(buffs) {
+  function sumSaveEffects(effects) {
+    const typed = {};
+    const untypedItems = [];
+    effects.forEach((effect) => {
+      const bonus = Number(effect.bonus) || 0;
+      if (bonus === 0) return;
+      if (effect.untyped) {
+        untypedItems.push({bonus, name: effect.buffName || '', type: 'untyped'});
+        return;
+      }
+      const type = (effect.type || '').trim().toLowerCase() || 'other';
+      if (!typed[type] || bonus > typed[type].bonus) {
+        typed[type] = {bonus, name: effect.buffName || '', type};
+      }
+    });
+    const typedItems = Object.values(typed);
+    const components = [...typedItems, ...untypedItems];
+    return {total: components.reduce((s, c) => s + c.bonus, 0), components};
+  }
+
+  const fortEffects = [];
+  const reflexEffects = [];
+  const willEffects = [];
+
+  buffs.filter((b) => b.enabled).forEach((buff) => {
+    buff.effects
+      .filter((e) => e.target === 'save' && Number(e.bonus) !== 0)
+      .forEach((e) => {
+        const entry = {...e, buffName: buff.name};
+        if (e.saveTarget === 'fort' || e.saveTarget === 'all') fortEffects.push(entry);
+        if (e.saveTarget === 'reflex' || e.saveTarget === 'all') reflexEffects.push(entry);
+        if (e.saveTarget === 'will' || e.saveTarget === 'all') willEffects.push(entry);
+      });
+  });
+
+  return {
+    fort: sumSaveEffects(fortEffects),
+    reflex: sumSaveEffects(reflexEffects),
+    will: sumSaveEffects(willEffects),
+  };
+}
+
+function renderSaveFormulaChips(container, base, mod, allComponents, buffComponents) {
+  container.innerHTML = '';
+  const terms = [
+    {value: base, label: 'Base Save'},
+    {value: mod, label: 'Attr Modifier'},
+    ...allComponents.map((c) => ({value: c.bonus, label: c.name, type: c.type})),
+    ...buffComponents.filter((c) => c.type !== 'untyped').map((c) => ({value: c.bonus, label: c.name, type: c.type})),
+  ].filter((t) => t.value !== 0 || t.label === 'Base Save' || t.label === 'Attr Modifier');
+
+  terms.forEach((term, index) => {
+    if (index > 0) {
+      const sep = document.createElement('span');
+      sep.className = 'formula-sep';
+      sep.textContent = term.value >= 0 ? '+' : '\u2212';
+      container.appendChild(sep);
+    }
+    const chip = document.createElement('div');
+    chip.className = 'formula-chip';
+    const val = document.createElement('strong');
+    val.textContent = Math.abs(term.value);
+    chip.appendChild(val);
+    const src = document.createElement('span');
+    src.textContent = term.label;
+    chip.appendChild(src);
+    if (term.type) {
+      const typeLine = document.createElement('span');
+      typeLine.className = 'formula-chip-type';
+      typeLine.textContent = term.type;
+      chip.appendChild(typeLine);
+    }
+    container.appendChild(chip);
+  });
+}
+
+function rollSave(saveKey) {
+  const total = state.currentSaves[saveKey];
+  const label = {fort: 'Fortitude', reflex: 'Reflex', will: 'Will'}[saveKey];
+  const d20 = rollDie(20);
+  const result = d20 + total;
+  const sign = total >= 0 ? '+' : '';
+  let note = '';
+  if (d20 === 1) note = `<span class="roll-nat-miss"> \u2014 Nat 1: Auto Fail!</span>`;
+  else if (d20 === 20) note = `<span class="roll-nat-hit"> \u2014 Nat 20: Auto Success!</span>`;
+  showRoll(
+    `${label} Save`,
+    `<span class="roll-d20">d20: ${d20}</span> ${sign}<span class="roll-bonus">${total}</span> = <span class="roll-total">${result}</span>${note}`,
+  );
+}
+
 function buildDiceExpression(bonusDice) {
   return Object.entries(bonusDice)
     .map(([dieType, count]) => `${count}${dieType}`)
@@ -706,6 +855,14 @@ function addBuff() {
   const acType = elements.buffAcType.value.trim();
   const acTouch = elements.buffAcTouch.checked;
   const acFlatfooted = elements.buffAcFlatfooted.checked;
+  const fortBonus = Number(elements.buffFortBonus.value) || 0;
+  const fortType = elements.buffFortType.value.trim();
+  const reflexBonus = Number(elements.buffReflexBonus.value) || 0;
+  const reflexType = elements.buffReflexType.value.trim();
+  const willBonus = Number(elements.buffWillBonus.value) || 0;
+  const willType = elements.buffWillType.value.trim();
+  const allsavesBonus = Number(elements.buffAllsavesBonus.value) || 0;
+  const allsavesType = elements.buffAllsavesType.value.trim();
 
   if (!name) {
     alert('Please enter a buff name.');
@@ -746,6 +903,10 @@ function addBuff() {
         touch: acTouch,
         flatfooted: acFlatfooted,
       },
+      {target: 'save', saveTarget: 'fort', bonus: fortBonus, type: fortType, untyped: fortType === ''},
+      {target: 'save', saveTarget: 'reflex', bonus: reflexBonus, type: reflexType, untyped: reflexType === ''},
+      {target: 'save', saveTarget: 'will', bonus: willBonus, type: willType, untyped: willType === ''},
+      {target: 'save', saveTarget: 'all', bonus: allsavesBonus, type: allsavesType, untyped: allsavesType === ''},
     ],
   });
 
@@ -762,6 +923,14 @@ function addBuff() {
   elements.buffAcType.value = '';
   elements.buffAcTouch.checked = false;
   elements.buffAcFlatfooted.checked = false;
+  elements.buffFortBonus.value = '0';
+  elements.buffFortType.value = '';
+  elements.buffReflexBonus.value = '0';
+  elements.buffReflexType.value = '';
+  elements.buffWillBonus.value = '0';
+  elements.buffWillType.value = '';
+  elements.buffAllsavesBonus.value = '0';
+  elements.buffAllsavesType.value = '';
   update();
 }
 
@@ -793,12 +962,19 @@ function rollAttack(attack) {
   const d20 = rollDie(20);
   const total = d20 + attack.value;
   const critRange = state.currentCritRange;
-  const isThreat = d20 >= critRange;
   const sign = attack.value >= 0 ? '+' : '';
-  const threatNote = isThreat ? `<span class="roll-crit-threat"> — Crit Threat!</span>` : '';
+  let note = '';
+  if (d20 === 1) {
+    note = `<span class="roll-nat-miss"> — Nat 1: Auto Miss!</span>`;
+  } else if (d20 === 20) {
+    note = `<span class="roll-nat-hit"> — Nat 20: Auto Hit!</span>`;
+    if (critRange <= 20) note += `<span class="roll-crit-threat"> Crit Threat!</span>`;
+  } else if (d20 >= critRange) {
+    note = `<span class="roll-crit-threat"> — Crit Threat!</span>`;
+  }
   showRoll(
     attack.label,
-    `<span class="roll-d20">d20: ${d20}</span> ${sign}<span class="roll-bonus">${attack.value}</span> = <span class="roll-total">${total}</span>${threatNote}`,
+    `<span class="roll-d20">d20: ${d20}</span> ${sign}<span class="roll-bonus">${attack.value}</span> = <span class="roll-total">${total}</span>${note}`,
   );
 }
 
@@ -814,7 +990,7 @@ function rollDamage(label, formula) {
 }
 
 function addInputListeners() {
-  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-base', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh'].forEach((id) => {
+  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-base', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
     document.getElementById(id).addEventListener('input', update);
   });
 }
@@ -852,6 +1028,11 @@ function init() {
   elements.topCritDamage.title = 'Click to roll critical damage';
   elements.topCritDamage.addEventListener('click', () => {
     if (state.currentCritFormula) rollDamage('Critical Damage', state.currentCritFormula);
+  });
+
+  ['fort', 'reflex', 'will'].forEach((save) => {
+    const el = elements[`summary${save.charAt(0).toUpperCase() + save.slice(1)}`];
+    el.addEventListener('click', () => rollSave(save));
   });
 
   setActiveTab(state.selectedTab);

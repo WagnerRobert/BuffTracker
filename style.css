@@ -214,6 +214,17 @@ td button {
   color: #a8b0d0;
 }
 
+.buff-form-divider {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #a8b0d0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+
 .formula-section {
   padding: 0.65rem 0;
 }
@@ -349,5 +360,15 @@ td button {
 
 .roll-crit-threat {
   color: #ffb347;
+  font-weight: 700;
+}
+
+.roll-nat-hit {
+  color: #4cff91;
+  font-weight: 700;
+}
+
+.roll-nat-miss {
+  color: #ff4c4c;
   font-weight: 700;
 }
