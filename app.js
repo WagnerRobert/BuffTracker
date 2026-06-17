@@ -50,6 +50,8 @@ const elements = {
   acShieldEnh: document.getElementById('ac-shield-enh'),
   acDeflection: document.getElementById('ac-deflection'),
   acNatural: document.getElementById('ac-natural'),
+  acDodge: document.getElementById('ac-dodge'),
+  acSize: document.getElementById('ac-size'),
   buffAcBonus: document.getElementById('buff-ac-bonus'),
   buffAcType: document.getElementById('buff-ac-type'),
   buffAcTouch: document.getElementById('buff-ac-touch'),
@@ -115,6 +117,8 @@ function loadState() {
   if (state.inputs.acShieldEnh !== undefined) elements.acShieldEnh.value = state.inputs.acShieldEnh;
   if (state.inputs.acDeflection !== undefined) elements.acDeflection.value = state.inputs.acDeflection;
   if (state.inputs.acNatural !== undefined) elements.acNatural.value = state.inputs.acNatural;
+  if (state.inputs.acDodge !== undefined) elements.acDodge.value = state.inputs.acDodge;
+  if (state.inputs.acSize !== undefined) elements.acSize.value = state.inputs.acSize;
   if (state.inputs.saveFortBase !== undefined) elements.saveFortBase.value = state.inputs.saveFortBase;
   if (state.inputs.saveFortMod !== undefined) elements.saveFortMod.value = state.inputs.saveFortMod;
   if (state.inputs.saveReflexBase !== undefined) elements.saveReflexBase.value = state.inputs.saveReflexBase;
@@ -139,6 +143,8 @@ function saveState() {
     acShieldEnh: elements.acShieldEnh.value,
     acDeflection: elements.acDeflection.value,
     acNatural: elements.acNatural.value,
+    acDodge: elements.acDodge.value,
+    acSize: elements.acSize.value,
     saveFortBase: elements.saveFortBase.value,
     saveFortMod: elements.saveFortMod.value,
     saveReflexBase: elements.saveReflexBase.value,
@@ -293,6 +299,8 @@ function update() {
   const shieldEnhBonus = Number(elements.acShieldEnh.value) || 0;
   const deflectionBonus = Number(elements.acDeflection.value) || 0;
   const naturalBonus = Number(elements.acNatural.value) || 0;
+  const dodgeBonus = Number(elements.acDodge.value) || 0;
+  const sizeBonus = Number(elements.acSize.value) || 0;
 
   const acBaseEffects = [
     {type: 'armor', bonus: armorBonus, untyped: false, touch: false, flatfooted: true, name: 'Armor'},
@@ -301,6 +309,8 @@ function update() {
     {type: 'enhancement (shield)', bonus: shieldEnhBonus, untyped: false, touch: false, flatfooted: true, name: 'Enh. (Shield)'},
     {type: 'deflection', bonus: deflectionBonus, untyped: false, touch: true, flatfooted: true, name: 'Deflection'},
     {type: 'natural armor', bonus: naturalBonus, untyped: false, touch: false, flatfooted: true, name: 'Natural Armor'},
+    {type: 'dodge', bonus: dodgeBonus, untyped: false, touch: true, flatfooted: false, name: 'Dodge'},
+    {type: 'size', bonus: sizeBonus, untyped: false, touch: true, flatfooted: true, name: 'Size'},
   ].filter((e) => e.bonus !== 0);
 
   const acApplied = calculateACAppliedBuffs(state.buffs, acBaseEffects);
@@ -1059,7 +1069,7 @@ function rollDamage(label, formula) {
 }
 
 function addInputListeners() {
-  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'ac-deflection', 'ac-natural', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
+  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'ac-deflection', 'ac-natural', 'ac-dodge', 'ac-size', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
     document.getElementById(id).addEventListener('input', update);
   });
 }
