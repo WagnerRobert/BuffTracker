@@ -49,6 +49,8 @@ const elements = {
   acArmorEnh: document.getElementById('ac-armor-enh'),
   acShield: document.getElementById('ac-shield'),
   acShieldEnh: document.getElementById('ac-shield-enh'),
+  acDeflection: document.getElementById('ac-deflection'),
+  acNatural: document.getElementById('ac-natural'),
   buffAcBonus: document.getElementById('buff-ac-bonus'),
   buffAcType: document.getElementById('buff-ac-type'),
   buffAcTouch: document.getElementById('buff-ac-touch'),
@@ -113,6 +115,8 @@ function loadState() {
   if (state.inputs.acArmorEnh !== undefined) elements.acArmorEnh.value = state.inputs.acArmorEnh;
   if (state.inputs.acShield !== undefined) elements.acShield.value = state.inputs.acShield;
   if (state.inputs.acShieldEnh !== undefined) elements.acShieldEnh.value = state.inputs.acShieldEnh;
+  if (state.inputs.acDeflection !== undefined) elements.acDeflection.value = state.inputs.acDeflection;
+  if (state.inputs.acNatural !== undefined) elements.acNatural.value = state.inputs.acNatural;
   if (state.inputs.saveFortBase !== undefined) elements.saveFortBase.value = state.inputs.saveFortBase;
   if (state.inputs.saveFortMod !== undefined) elements.saveFortMod.value = state.inputs.saveFortMod;
   if (state.inputs.saveReflexBase !== undefined) elements.saveReflexBase.value = state.inputs.saveReflexBase;
@@ -136,6 +140,8 @@ function saveState() {
     acArmorEnh: elements.acArmorEnh.value,
     acShield: elements.acShield.value,
     acShieldEnh: elements.acShieldEnh.value,
+    acDeflection: elements.acDeflection.value,
+    acNatural: elements.acNatural.value,
     saveFortBase: elements.saveFortBase.value,
     saveFortMod: elements.saveFortMod.value,
     saveReflexBase: elements.saveReflexBase.value,
@@ -234,8 +240,7 @@ function update() {
     {value: bab, label: 'BAB', type: null},
     {value: attr, label: 'Attr Modifier', type: null},
     ...attackApplied.appliedComponents
-      .filter((c) => c.type !== 'untyped')
-      .map((c) => ({value: c.bonus, label: c.name, type: c.type})),
+      .map((c) => ({value: c.bonus, label: c.name, type: c.type !== 'untyped' ? c.type : null})),
   ];
   elements.formulaText.innerHTML = '';
   formulaTerms.forEach((term, index) => {
@@ -289,12 +294,16 @@ function update() {
   const armorEnhBonus = Number(elements.acArmorEnh.value) || 0;
   const shieldBonus = Number(elements.acShield.value) || 0;
   const shieldEnhBonus = Number(elements.acShieldEnh.value) || 0;
+  const deflectionBonus = Number(elements.acDeflection.value) || 0;
+  const naturalBonus = Number(elements.acNatural.value) || 0;
 
   const acBaseEffects = [
     {type: 'armor', bonus: armorBonus, untyped: false, touch: false, flatfooted: true, name: 'Armor'},
     {type: 'enhancement (armor)', bonus: armorEnhBonus, untyped: false, touch: false, flatfooted: true, name: 'Enh. (Armor)'},
     {type: 'shield', bonus: shieldBonus, untyped: false, touch: false, flatfooted: true, name: 'Shield'},
     {type: 'enhancement (shield)', bonus: shieldEnhBonus, untyped: false, touch: false, flatfooted: true, name: 'Enh. (Shield)'},
+    {type: 'deflection', bonus: deflectionBonus, untyped: false, touch: true, flatfooted: true, name: 'Deflection'},
+    {type: 'natural armor', bonus: naturalBonus, untyped: false, touch: false, flatfooted: true, name: 'Natural Armor'},
   ].filter((e) => e.bonus !== 0);
 
   const acApplied = calculateACAppliedBuffs(state.buffs, acBaseEffects);
@@ -325,8 +334,8 @@ function update() {
     {value: null, label: normalDiceExpression, type: null, isDice: true},
     {value: damageMod, label: 'Attr Modifier', type: null},
     ...damageApplied.appliedComponents
-      .filter((c) => c.type !== 'untyped' && c.bonus !== 0)
-      .map((c) => ({value: c.bonus, label: c.name, type: c.type + (c.precision ? ' (prec.)' : '')})),
+      .filter((c) => c.bonus !== 0)
+      .map((c) => ({value: c.bonus, label: c.name, type: c.type === 'untyped' ? (c.precision ? '(prec.)' : null) : c.type + (c.precision ? ' (prec.)' : '')})),
   ];
   elements.damageFormula.innerHTML = '';
   damageFormulaTerms.forEach((term, index) => {
@@ -631,7 +640,7 @@ function renderSaveFormulaChips(container, base, mod, allComponents, buffCompone
     {value: base, label: 'Base Save'},
     {value: mod, label: 'Attr Modifier'},
     ...allComponents.map((c) => ({value: c.bonus, label: c.name, type: c.type})),
-    ...buffComponents.filter((c) => c.type !== 'untyped').map((c) => ({value: c.bonus, label: c.name, type: c.type})),
+    ...buffComponents.map((c) => ({value: c.bonus, label: c.name, type: c.type !== 'untyped' ? c.type : null})),
   ].filter((t) => t.value !== 0 || t.label === 'Base Save' || t.label === 'Attr Modifier');
 
   terms.forEach((term, index) => {
@@ -990,7 +999,7 @@ function rollDamage(label, formula) {
 }
 
 function addInputListeners() {
-  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-base', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
+  ['bab', 'attr', 'damage-mod', 'damage-dice-count', 'damage-dice-type', 'crit-multiplier', 'crit-range', 'ac-base', 'ac-armor', 'ac-armor-enh', 'ac-shield', 'ac-shield-enh', 'ac-deflection', 'ac-natural', 'save-fort-base', 'save-fort-mod', 'save-reflex-base', 'save-reflex-mod', 'save-will-base', 'save-will-mod', 'save-all-bonus'].forEach((id) => {
     document.getElementById(id).addEventListener('input', update);
   });
 }
