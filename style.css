@@ -184,9 +184,8 @@ td button {
 
 .summary-offense-grid {
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  gap: 1.25rem;
-  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   align-items: start;
 }
 
@@ -403,7 +402,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-columns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
   gap: 1.5rem;
   align-items: start;
 }
@@ -466,7 +465,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-defense-col .ac-summary-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
   gap: 0.75rem;
 }
 
@@ -486,7 +485,7 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
 
 .summary-saves-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
