@@ -417,7 +417,51 @@ button.buff-form-divider[aria-expanded="true"] .collapse-arrow {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #a8b0d0;
+}
+
+.summary-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 0.4rem;
+}
+
+.summary-collapse-toggle {
+  border: none;
+  background: transparent;
+  color: #a8b0d0;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.summary-collapse-toggle .collapse-arrow {
+  margin-left: 0.3rem;
+  transition: transform 0.2s;
+}
+
+.summary-collapse-toggle[aria-expanded="true"] .collapse-arrow {
+  transform: rotate(90deg);
+}
+
+.summary-collapse-toggle:hover {
+  color: #e8edf8;
+}
+
+.summary-collapse-toggle .collapse-arrow {
+  transition: transform 0.2s;
+}
+
+.summary-collapse-toggle[aria-expanded="true"] .collapse-arrow {
+  transform: rotate(90deg);
 }
 
 .summary-defense-col .ac-summary-grid {

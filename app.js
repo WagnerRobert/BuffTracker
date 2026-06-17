@@ -1127,6 +1127,22 @@ function init() {
     savesFields.hidden = expanded;
   });
 
+  const summaryDefenseToggle = document.getElementById('summary-defense-toggle');
+  const summaryDefenseContent = document.getElementById('summary-defense-content');
+  summaryDefenseToggle.addEventListener('click', () => {
+    const expanded = summaryDefenseToggle.getAttribute('aria-expanded') === 'true';
+    summaryDefenseToggle.setAttribute('aria-expanded', String(!expanded));
+    summaryDefenseContent.hidden = expanded;
+  });
+
+  const summarySavesToggle = document.getElementById('summary-saves-toggle');
+  const summarySavesContent = document.getElementById('summary-saves-content');
+  summarySavesToggle.addEventListener('click', () => {
+    const expanded = summarySavesToggle.getAttribute('aria-expanded') === 'true';
+    summarySavesToggle.setAttribute('aria-expanded', String(!expanded));
+    summarySavesContent.hidden = expanded;
+  });
+
   document.querySelectorAll('.tab-button').forEach((button) => {
     button.addEventListener('click', () => setActiveTab(button.dataset.tab));
   });

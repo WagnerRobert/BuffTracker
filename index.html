@@ -40,40 +40,52 @@
           </div>
         </div>
         <div class="summary-col summary-defense-col">
-          <div class="summary-col-label">Defense</div>
-          <div class="ac-summary-grid">
-            <div class="ac-summary-item">
-              <span>Total</span>
-              <strong id="summary-ac-total">10</strong>
-            </div>
-            <div class="ac-summary-item">
-              <span>Touch</span>
-              <strong id="summary-ac-touch">10</strong>
-            </div>
-            <div class="ac-summary-item">
-              <span>Flat-footed</span>
-              <strong id="summary-ac-flatfooted">10</strong>
-            </div>
-            <div class="ac-summary-item">
-              <span>Flat Touch</span>
-              <strong id="summary-ac-flatfooted-touch">10</strong>
+          <div class="summary-col-header">
+            <button type="button" class="summary-col-label summary-collapse-toggle collapsible-toggle" id="summary-defense-toggle" aria-expanded="true" title="Toggle Defense">
+              Defense <span class="collapse-arrow">▸</span>
+            </button>
+          </div>
+          <div id="summary-defense-content" class="collapsible-section">
+            <div class="ac-summary-grid">
+              <div class="ac-summary-item">
+                <span>Total</span>
+                <strong id="summary-ac-total">10</strong>
+              </div>
+              <div class="ac-summary-item">
+                <span>Touch</span>
+                <strong id="summary-ac-touch">10</strong>
+              </div>
+              <div class="ac-summary-item">
+                <span>Flat-footed</span>
+                <strong id="summary-ac-flatfooted">10</strong>
+              </div>
+              <div class="ac-summary-item">
+                <span>Flat Touch</span>
+                <strong id="summary-ac-flatfooted-touch">10</strong>
+              </div>
             </div>
           </div>
         </div>
         <div class="summary-col summary-saves-col">
-          <div class="summary-col-label">Saves</div>
-          <div class="summary-saves-row">
-            <div id="summary-fort-card" class="save-item rollable" title="Click to roll Fortitude">
-              <span class="save-label">Fortitude</span>
-              <strong id="summary-fort-value">+4</strong>
-            </div>
-            <div id="summary-reflex-card" class="save-item rollable" title="Click to roll Reflex">
-              <span class="save-label">Reflex</span>
-              <strong id="summary-reflex-value">+4</strong>
-            </div>
-            <div id="summary-will-card" class="save-item rollable" title="Click to roll Will">
-              <span class="save-label">Will</span>
-              <strong id="summary-will-value">0</strong>
+          <div class="summary-col-header">
+            <button type="button" class="summary-col-label summary-collapse-toggle collapsible-toggle" id="summary-saves-toggle" aria-expanded="true" title="Toggle Saves">
+              Saves <span class="collapse-arrow">▸</span>
+            </button>
+          </div>
+          <div id="summary-saves-content" class="collapsible-section">
+            <div class="summary-saves-row">
+              <div id="summary-fort-card" class="save-item rollable" title="Click to roll Fortitude">
+                <span class="save-label">Fortitude</span>
+                <strong id="summary-fort-value">+4</strong>
+              </div>
+              <div id="summary-reflex-card" class="save-item rollable" title="Click to roll Reflex">
+                <span class="save-label">Reflex</span>
+                <strong id="summary-reflex-value">+4</strong>
+              </div>
+              <div id="summary-will-card" class="save-item rollable" title="Click to roll Will">
+                <span class="save-label">Will</span>
+                <strong id="summary-will-value">0</strong>
+              </div>
             </div>
           </div>
         </div>
